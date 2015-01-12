@@ -1,8 +1,39 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: lightgray;
 }
 
 a {
   color: #00B7FF;
+}
+
+/* My Styling */
+#conversation_box {
+	height: 500px;
+	width: 400px;
+	background-color: white;
+	outline: 2px solid black;
+	overflow-y: auto;
+}
+
+input {
+	margin-top: 10px;
+	display: block;
+}
+
+.new_user {
+	color: green;
+	font-style: italic;
+}
+.exisiting_messages {
+	color: gray;
+	font-style: italic;
+}
+.new_message {
+	color: black;
+}
+.user_left {
+	color: red;
+	font-style: italic;
 }

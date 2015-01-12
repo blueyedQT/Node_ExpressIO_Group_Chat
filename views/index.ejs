@@ -2,10 +2,44 @@
 <html>
   <head>
     <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+    	$(document).ready(function(){
+    		var user_name = prompt('What is your name?');
+    		io = io.connect();
+    		io.emit('got_new_user', {name: user_name});
+    		io.on('new_user', function(message) {
+    			$('#conversation_box').append('<p class="new_user">'+message+'</p>')
+    				.scrollTop($("#conversation_box")[0].scrollHeight);
+    		})
+    		io.on('exisiting_users', function(messages){
+    			for(var i=0; i<messages.length-1; i++){
+    				$('#conversation_box').append('<p class="exisiting_messages">'+messages[i]+'</p>');
+    			}
+    			$('#conversation_box').append('<p class="new_user">'+messages[messages.length-1]+'</p>').
+    				scrollTop($("#conversation_box")[0].scrollHeight);
+    		});
+    		io.on('chat_update', function(message){
+    			$('#conversation_box').append('<p class="new_message">'+message+'</p>')
+    				.scrollTop($("#conversation_box")[0].scrollHeight);
+    		})
+    		$('.button').click(function(){
+    			io.emit('new_message', {message: $("[name='add_message']").val()});
+    		});
+    		io.on('disconnected_user', function(message){
+    			$('#conversation_box').append('<p class="user_left">'+message+'</p>')
+    				.scrollTop($("#conversation_box")[0].scrollHeight);
+    		})
+    	});
+    </script>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <h1>Welcome to <%= title %></h1>
+    <div id="conversation_box">
+    </div>
+    <input type="text" name="add_message" placeholder="Type your message here">
+    <input class="button" type="submit" value="Send">
   </body>
 </html>
