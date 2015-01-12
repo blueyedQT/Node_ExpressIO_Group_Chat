@@ -2,38 +2,39 @@ body {
   padding: 50px;
   font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
   background-color: lightgray;
+  text-align: center;
+  margin: 0 auto;
+  width: 404px;
 }
-
-a {
-  color: #00B7FF;
-}
-
-/* My Styling */
 #conversation_box {
-	height: 500px;
+	height: 400px;
 	width: 400px;
 	background-color: white;
 	outline: 2px solid black;
 	overflow-y: auto;
+	padding: 5px;
+	text-align: left;
 }
-
 input {
 	margin-top: 10px;
-	display: block;
 }
-
+.user_message {
+	width: 300px;
+}
+p {
+	margin: 2px;
+	font-style: italic;
+}
 .new_user {
 	color: green;
-	font-style: italic;
 }
 .exisiting_messages {
 	color: gray;
-	font-style: italic;
 }
 .new_message {
 	color: black;
+	font-style: normal;
 }
 .user_left {
 	color: red;
-	font-style: italic;
 }
