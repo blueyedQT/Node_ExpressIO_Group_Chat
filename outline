@@ -1,0 +1,62 @@
+1) When the client requests "/", have the server render view/index.ejs".
+
+	app.get("/", function(req, res) {
+		res.render...
+	});
+
+2) In the client codes on index.ejs, if the user has not entered their name already, have a javascript code that asks the user for their name and store this user input in a variable called "name".
+
+	<script>
+		var name = prompt('What is your name?');
+	</script>
+
+3) Have the client EMIT "got_a_new_user" and pass "name" to the server.
+
+	<script>
+		var name = prompt('What is your name?');
+		io = io.connect();
+		io.emit('got_a_new_user', {name: name});
+	</script>
+
+4) Have the server LISTEN for an event valled "got_a_new_user" and when that event gets triggered:
+	
+	1) Store the name/session id of the user in an array called 'messages'.
+
+		var messages = [];
+		var count = 0;
+		messages.push({message: req.data.name, 'has joined the conversation.', count: count});
+
+	2) Have the server BROADCAST and event called "new_user" to the client with the name of the new user attached to this event.
+
+		app.io.route("got_a_new_user", function(req) {
+			req.io.braodcast("new_user", {new_user_message: messages[count]});
+		});
+
+	3) To the person who sent this request, EMIT an event called 'exisiting_users' with all the message data.
+
+		app.io.route("got_a_new_user", function(req) {
+			req.io.braodcast("new_user", {new_user_name: messages[count]});
+			req.io.emit('existing_messages', messages);
+		});
+
+5) Have the client LISTEN for an event called "new_user" and when this event gets triggered, have the client render this information in jQuery somehwere in the HTML.
+
+	<script>
+		var name = prompt('What is your name?');
+		io = io.connect();
+		io.emit('got_a_new_user', {name: name});
+
+		io.on('new_user', function(data) {
+			//reder this info in the html
+		})
+	</script>
+
+6) When the client submits a message, have the client EMIT an event called "new_message" to the server, and attach the value of the input with the event.
+
+7) Have the server LISTEN for an event called "new_message" and when this event gets triggered, add "new_message" to the messages array along with the name of the user who sent the message.  BROADCAST to everyone and event called "chat_update".
+
+8) Have the client LISTEN for an event called "chat_update" and when this event gets triggered, update the HTML text of the conversation board.
+
+9) Have the server LISTEN for an event called "disconnect", and when this gets triggered, add a disconnect message to the messages array and BROADCAST and event called "disconnected_user" with the message to all users.
+
+10) Have the client LISTEN for an event "disconnected_user" and when this gets tirggered render the message in the HTML of the conversation board.
